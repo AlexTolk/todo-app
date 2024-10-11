@@ -28,7 +28,7 @@ const App = () => {
         onComplete={handleCompleteTask}
         onDelete={DeleteTaskHandler}
       />
-      {!isModalOpen && <button onClick={openModal}>Add Task</button>}
+      {!isModalOpen && <button className="open-button" onClick={openModal}>Add Task</button>}
 
       {isModalOpen && <AddTodoModal closeModal={closeModal} setTodos={setTodos} />}
     </div>
