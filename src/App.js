@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import TodoList from './components/TodoList';
+import AddTodoModal from './components/AddTodoModal';
+import { useState, useCallback } from 'react';
+import './App.css'
 
-function App() {
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = useCallback(() => setIsModalOpen(true), []);
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
+
+  const handleCompleteTask = useCallback((index) => {
+    setTodos(prevTodos => 
+      prevTodos.map((todo, i) =>
+        i === index ? {...todo, completed: !todo.completed} : todo
+      )
+    );
+  }, []);
+  const DeleteTaskHandler = useCallback((index) => {
+    setTodos(prevTodos => prevTodos.filter((_, i) => i !== index));
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <TodoList
+        todos={todos}
+        onComplete={handleCompleteTask}
+        onDelete={DeleteTaskHandler}
+      />
+      {!isModalOpen && <button onClick={openModal}>Add Task</button>}
+
+      {isModalOpen && <AddTodoModal closeModal={closeModal} setTodos={setTodos} />}
     </div>
   );
-}
+};
 
 export default App;
